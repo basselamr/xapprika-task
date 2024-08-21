@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:untitled/Controllers/StepperController.dart';
 import 'package:untitled/Models/CustomIcons.dart';
+import 'package:untitled/Screens/PlacesScreen.dart';
 import 'package:untitled/Widgets/BackArrow.dart';
 import 'package:untitled/Widgets/CheckBoxListile.dart';
 
@@ -31,8 +32,8 @@ class AddReviewScreen extends StatelessWidget {
       body: Obx(
             () {
           int currentStep = stepperController.currentStep.value;
+          bool isLastStep = currentStep == 7; // Assuming 7 is the last step
 
-          // Define a map of icons and questions for each step
           Map<int, IconData> stepIcons = {
             1: CustomIcons.group_57572,
             2: Icons.star,
@@ -67,21 +68,67 @@ class AddReviewScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: Colors.pink[50],
                       ),
-                      child: Icon(
-                        stepIcons[currentStep] ?? Icons.help, // Default icon if not found
+                      child: isLastStep
+                          ?  Icon(
+                        CustomIcons.vuesax_bulk_tick_circle,
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        size: 70,
+                      )
+                          : Icon(
+                        stepIcons[currentStep] ?? Icons.help,
                         color: Theme.of(context).colorScheme.primary,
-                        size: 200,
+                        size: 100,
                       ),
                     ),
                   ),
                   Expanded(
                     child: ListView(
-                      children: stepQuestions[currentStep]
+                      children: isLastStep
+                          ? [
+                        Center(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              const Text(
+                                'Thanks',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF06B58D),
+                                ),
+                              ),
+                              Text(
+                                'Your review submitted successfully',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.secondaryContainer,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Get.to(const PlacesScreen());
+                                },
+                                child: const Text('Go to Home',style: TextStyle(color: Colors.white),),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]
+                          : stepQuestions[currentStep]
                           ?.map(
                             (question) => CustomCheckboxTile(
                           isAvailable: true,
                           onTap: () {
-
+                            // Handle checkbox tap
                           },
                         ),
                       )
@@ -91,30 +138,7 @@ class AddReviewScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 16,
-                left: 16,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    stepperController.previousStep();
-                  },
-                  mini: true,
-                  backgroundColor: const Color(0xFFF8FAFF),
-                  child: const Icon(Icons.arrow_back, color: Color(0xFF797F96)),
-                ),
-              ),
-              Positioned(
-                bottom: 16,
-                right: 16,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    stepperController.nextStep();
-                  },
-                  mini: true,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: const Icon(Icons.arrow_forward),
-                ),
-              ),
+
             ],
           );
         },
