@@ -62,22 +62,24 @@ class AddReviewScreen extends StatelessWidget {
                     heightFactor: 2,
                     child: Container(
                       padding: const EdgeInsets.all(25),
-                      width: 110,
-                      height: 110,
+                      width: 97,
+                      height: 97,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.pink[50],
+                        color: isLastStep ? Colors.green[50] : Colors.pink[50],
                       ),
-                      child: isLastStep
-                          ?  Icon(
-                        CustomIcons.vuesax_bulk_tick_circle,
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        size: 70,
-                      )
-                          : Icon(
-                        stepIcons[currentStep] ?? Icons.help,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 100,
+                      child: Center(
+                        child: isLastStep
+                            ? const Icon(
+                          CustomIcons.vuesax_bulk_tick_circle,
+                          color: Colors.green,
+                          size: 48,
+                        )
+                            : Icon(
+                          stepIcons[currentStep] ?? Icons.help,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 48,
+                        ),
                       ),
                     ),
                   ),
@@ -104,20 +106,25 @@ class AddReviewScreen extends StatelessWidget {
                                   fontSize: 14,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).colorScheme.secondaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
                                 ),
                               ),
                               const SizedBox(height: 20),
                               ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
                                 onPressed: () {
                                   Get.to(const PlacesScreen());
                                 },
-                                child: const Text('Go to Home',style: TextStyle(color: Colors.white),),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: const Text(
+                                  'Go to home',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ],
                           ),
@@ -127,9 +134,7 @@ class AddReviewScreen extends StatelessWidget {
                           ?.map(
                             (question) => CustomCheckboxTile(
                           isAvailable: true,
-                          onTap: () {
-                            // Handle checkbox tap
-                          },
+                          onTap: () {},
                         ),
                       )
                           .toList() ??
@@ -138,7 +143,51 @@ class AddReviewScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
+              if (!isLastStep && currentStep != 7)
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      stepperController.previousStep();
+                    },
+                    mini: true,
+                    backgroundColor: const Color(0xFFF8FAFF),
+                    child: const Icon(Icons.arrow_back, color: Color(0xFF797F96)),
+                  ),
+                ),
+              if (!isLastStep && currentStep != 7)
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      stepperController.nextStep();
+                    },
+                    mini: true,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: const Icon(Icons.arrow_forward),
+                  ),
+                ),
+              if (currentStep == 6)
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      stepperController.nextStep();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                    ),
+                    child: const Text(
+                      'Send Review',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
             ],
           );
         },
