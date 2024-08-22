@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:untitled/Bindings/stepper_binding.dart';
 import 'package:untitled/Screens/AddReview.dart';
 import 'package:untitled/Screens/PlacesScreen.dart';
 import 'package:untitled/Widgets/BackArrow.dart';
@@ -12,20 +13,18 @@ class NewPlaceScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          "Add a new place",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            "Add a new place",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        leading: const BackArrow()
-        ),
-
+          leading: const BackArrow()),
       body: Padding(
         padding: const EdgeInsets.only(top: 30.0, left: 15, right: 15),
         child: Column(
@@ -93,7 +92,7 @@ class NewPlaceScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to( AddReviewScreen());
+                  Get.to(() => AddReviewScreen(), binding: StepperBinding());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,

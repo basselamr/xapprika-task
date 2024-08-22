@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:untitled/Controllers/CheckBoxController.dart';
 
 class CustomCheckboxTile extends StatelessWidget {
+  final String text;
+  final Color activeBorderColor;
+  final bool checkBoxValue;
+  final double height;
+  final double width;
   final bool isAvailable;
-  final VoidCallback onTap;
+  final Function(bool) onTap;
 
   const CustomCheckboxTile({
-    Key? key,
+    super.key,
     required this.isAvailable,
     required this.onTap,
-  }) : super(key: key);
+    required this.text,
+    required this.height,
+    required this.width,
+    required this.checkBoxValue,
+    required this.activeBorderColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,45 +37,45 @@ class CustomCheckboxTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Disability parking space available',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                 Text(
-                  '(private or public parking)',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                  ),
-                ),
+                Container(
+                    height: height,
+                    width: width,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: activeBorderColor,
+                        ),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20))),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          text,
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Checkbox.adaptive(
+                            value: checkBoxValue,
+                            activeColor: Colors.pink[100],
+                            checkColor: Colors.pink,
+                            side: const BorderSide(color: Colors.grey),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            tristate: true,
+                            onChanged: (x) {
+                              onTap(false);
+                            })
+                      ],
+                    ))
               ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Transform.scale(
-            scale: 1.4,
-            child: Checkbox(
-              value: !isAvailable,
-              onChanged: (value) {
-                if (value != null) {
-                  onTap();
-                }
-              },
-              checkColor: Theme.of(context).colorScheme.primary,
-              activeColor: Colors.pink[50],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              side: const BorderSide(
-                color: Color(0xFFF8FAFF),
-                width: 2,
-              ),
             ),
           ),
         ],

@@ -23,7 +23,7 @@ class NavBar extends StatelessWidget {
     return Scaffold(
       body: Obx(() => _screens[navController.selectedIndex.value]),
       bottomNavigationBar: Obx(
-            () => BottomNavigationBar(
+        () => BottomNavigationBar(
           currentIndex: navController.selectedIndex.value,
           onTap: navController.updateIndex,
           type: BottomNavigationBarType.fixed,
@@ -32,13 +32,13 @@ class NavBar extends StatelessWidget {
               icon: Icon(CustomIcons.home2),
               label: 'Home',
             ),
-
             const BottomNavigationBarItem(
               icon: Icon(Icons.map_sharp),
               label: 'Places',
             ),
             BottomNavigationBarItem(
-              icon: Transform.rotate(origin: const Offset(0, 4),
+              icon: Transform.rotate(
+                origin: const Offset(0, 4),
                 angle: 10,
                 filterQuality: FilterQuality.high,
                 alignment: Alignment.center,
@@ -49,10 +49,14 @@ class NavBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(9),
                     color: Colors.blueAccent.withOpacity(0.1),
                   ),
-                  child: Transform.rotate(angle: -10,
+                  child: Transform.rotate(
+                    angle: -10,
                     child: IconButton(
                       icon: const Icon(Icons.add),
-                      color: Colors.blue[900], onPressed: () { Get.to(const NewPlaceScreen()); },
+                      color: Colors.blue[900],
+                      onPressed: () {
+                        Get.to(() => const NewPlaceScreen());
+                      },
                     ),
                   ),
                 ),

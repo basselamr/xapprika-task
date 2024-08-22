@@ -1,16 +1,20 @@
 import 'package:get/get.dart';
 
-class StepperController extends GetxController{
+class StepperController extends GetxController {
   var complete = false.obs;
-  var currentStep=1.obs;
+  var currentStep = 1.obs;
 
-  nextStep(){
+  bool isLastStep() {
+    return currentStep.value == 7;
+  }
+
+  nextStep() {
     currentStep++;
   }
-  previousStep(){
 
+  previousStep() {
     currentStep--;
-    if(currentStep==0){
+    if (currentStep.value == 0) {
       currentStep++;
     }
   }

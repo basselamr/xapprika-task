@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:untitled/Controllers/CheckBoxController.dart';
 import 'package:untitled/Controllers/StepperController.dart';
 import 'package:untitled/Models/CustomIcons.dart';
-import 'package:untitled/Screens/PlacesScreen.dart';
+import 'package:untitled/Screens/NavBar.dart';
 import 'package:untitled/Widgets/BackArrow.dart';
 import 'package:untitled/Widgets/CheckBoxListile.dart';
 
 class AddReviewScreen extends StatelessWidget {
-  AddReviewScreen({Key? key}) : super(key: key);
+  AddReviewScreen({super.key});
 
-  final stepperController = Get.put(StepperController());
+  final stepperController = Get.find<StepperController>();
+  final _checkBoxController = Get.put(CheckBoxController());
+
+  Map<int, IconData> stepIcons = {
+    1: CustomIcons.group_57572,
+    2: Icons.star,
+    3: Icons.thumb_up,
+  };
+
+  Map<int, List<String>> stepQuestions = {
+    1: ["Question 1 for Step 1", "Question 2 for Step 1"],
+    2: ["Question 1 for Step 2", "Question 2 for Step 2"],
+    3: ["Question 1 for Step 3", "Question 2 for Step 3"],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -29,30 +43,13 @@ class AddReviewScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Obx(
-            () {
-          int currentStep = stepperController.currentStep.value;
-          bool isLastStep = currentStep == 7; // Assuming 7 is the last step
-
-          Map<int, IconData> stepIcons = {
-            1: CustomIcons.group_57572,
-            2: Icons.star,
-            3: Icons.thumb_up,
-          };
-
-          Map<int, List<String>> stepQuestions = {
-            1: ["Question 1 for Step 1", "Question 2 for Step 1"],
-            2: ["Question 1 for Step 2", "Question 2 for Step 2"],
-            3: ["Question 1 for Step 3", "Question 2 for Step 3"],
-          };
-
-          return Stack(
+      body: Obx(() => Stack(
             children: [
               Column(
                 children: [
                   StepProgressIndicator(
                     totalSteps: 7,
-                    currentStep: currentStep,
+                    currentStep: stepperController.currentStep(),
                     size: 10,
                     padding: 0,
                     selectedColor: Theme.of(context).colorScheme.secondary,
@@ -66,84 +63,102 @@ class AddReviewScreen extends StatelessWidget {
                       height: 97,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isLastStep ? Colors.green[50] : Colors.pink[50],
+                        color: stepperController.isLastStep()
+                            ? Colors.green[50]
+                            : Colors.pink[50],
                       ),
                       child: Center(
-                        child: isLastStep
+                        child: stepperController.isLastStep()
                             ? const Icon(
-                          CustomIcons.vuesax_bulk_tick_circle,
-                          color: Colors.green,
-                          size: 48,
-                        )
+                                CustomIcons.vuesax_bulk_tick_circle,
+                                color: Colors.green,
+                                size: 48,
+                              )
                             : Icon(
-                          stepIcons[currentStep] ?? Icons.help,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 48,
-                        ),
+                                stepIcons[stepperController.currentStep()] ??
+                                    Icons.help,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 48,
+                              ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: ListView(
-                      children: isLastStep
+                      children: stepperController.isLastStep()
                           ? [
-                        Center(
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 20),
-                              const Text(
-                                'Thanks',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF06B58D),
+                              Center(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'Thanks',
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF06B58D),
+                                      ),
+                                    ),
+                                    Text(
+                                      'Your review submitted successfully',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.off(() => NavBar());
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                      ),
+                                      child: const Text(
+                                        'Go to home',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                'Your review submitted successfully',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.to(const PlacesScreen());
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                ),
-                                child: const Text(
-                                  'Go to home',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]
-                          : stepQuestions[currentStep]
-                          ?.map(
-                            (question) => CustomCheckboxTile(
-                          isAvailable: true,
-                          onTap: () {},
-                        ),
-                      )
-                          .toList() ??
-                          [],
+                            ]
+                          : stepQuestions[stepperController.currentStep()]
+                                  ?.map(
+                                    (question) => CustomCheckboxTile(
+                                      height: 75,
+                                      width: 300,
+                                      text:
+                                          'Disability parking space available\n(private or public parking)',
+                                      isAvailable: true,
+                                      onTap: (fsd) {
+                                        Get.find<CheckBoxController>()
+                                            .toggleDisability();
+                                      },
+                                      checkBoxValue: _checkBoxController
+                                          .isDisabilityChecked(),
+                                      activeBorderColor: _checkBoxController
+                                              .isDisabilityChecked()
+                                          ? Colors.pink
+                                          : Colors.grey,
+                                    ),
+                                  )
+                                  .toList() ??
+                              [],
                     ),
                   ),
                 ],
               ),
-              if (!isLastStep && currentStep != 7)
+              if (stepperController.currentStep() != 7)
                 Positioned(
                   bottom: 16,
                   left: 16,
@@ -153,10 +168,11 @@ class AddReviewScreen extends StatelessWidget {
                     },
                     mini: true,
                     backgroundColor: const Color(0xFFF8FAFF),
-                    child: const Icon(Icons.arrow_back, color: Color(0xFF797F96)),
+                    child:
+                        const Icon(Icons.arrow_back, color: Color(0xFF797F96)),
                   ),
                 ),
-              if (!isLastStep && currentStep != 7)
+              if (stepperController.currentStep() != 7)
                 Positioned(
                   bottom: 16,
                   right: 16,
@@ -169,7 +185,7 @@ class AddReviewScreen extends StatelessWidget {
                     child: const Icon(Icons.arrow_forward),
                   ),
                 ),
-              if (currentStep == 6)
+              if (stepperController.currentStep() == 6)
                 Positioned(
                   bottom: 16,
                   right: 16,
@@ -189,9 +205,7 @@ class AddReviewScreen extends StatelessWidget {
                   ),
                 ),
             ],
-          );
-        },
-      ),
+          )),
     );
   }
 }
