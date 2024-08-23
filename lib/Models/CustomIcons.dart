@@ -12,6 +12,16 @@ class CustomIcons {
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData group_57572 =
       IconData(0xe800, fontFamily: 'MyFlutterApp3', fontPackage: _kFontPkg);
-  static const IconData vuesax_bulk_tick_circle =
-      IconData(0xe800, fontFamily: 'MyFlutterApp2', fontPackage: _kFontPkg);
+  static const IconData pavementIcon =
+      IconData(0xe800, fontFamily: 'MyFlutterApp5', fontPackage: _kFontPkg);
+  static const IconData group_57577 =
+      IconData(0xe800, fontFamily: 'MyFlutterApp11', fontPackage: _kFontPkg);
+  static const IconData stepsss =
+      IconData(0xe801, fontFamily: 'MyFlutterApp4', fontPackage: _kFontPkg);
+  static const IconData group_57580 =
+      IconData(0xe800, fontFamily: 'MyFlutterApp7', fontPackage: _kFontPkg);
+  static const IconData service =
+      IconData(0xe800, fontFamily: 'MyFlutterApp8', fontPackage: _kFontPkg);
+  static const IconData wc =
+      IconData(0xe800, fontFamily: 'MyFlutterApp9', fontPackage: _kFontPkg);
 }

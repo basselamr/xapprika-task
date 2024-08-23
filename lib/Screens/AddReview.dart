@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:untitled/Controllers/CheckBoxController.dart';
-import 'package:untitled/Controllers/StepperController.dart';
-import 'package:untitled/Models/CustomIcons.dart';
-import 'package:untitled/Screens/NavBar.dart';
-import 'package:untitled/Widgets/BackArrow.dart';
-import 'package:untitled/Widgets/CheckBoxListile.dart';
+import 'package:untitled/Models/questionsData.dart';
+import '../Controllers/CheckBoxController.dart';
+import '../Controllers/StepperController.dart';
+import '../Models/CustomIcons.dart';
+import '../Widgets/BackArrow.dart';
+import '../Widgets/CheckBoxListile.dart';
+import 'NavBar.dart';
 
 class AddReviewScreen extends StatelessWidget {
   AddReviewScreen({super.key});
@@ -16,8 +17,11 @@ class AddReviewScreen extends StatelessWidget {
 
   Map<int, IconData> stepIcons = {
     1: CustomIcons.group_57572,
-    2: Icons.star,
-    3: Icons.thumb_up,
+    2: CustomIcons.pavementIcon,
+    3: CustomIcons.group_57577,
+    4: CustomIcons.group_57580,
+    5: CustomIcons.service,
+    6: CustomIcons.wc
   };
 
   Map<int, List<String>> stepQuestions = {
@@ -28,6 +32,24 @@ class AddReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _checkBoxController.initialize(
+        stepQuestions[stepperController.currentStep()]?.length ?? 0);
+
+    // Retrieve the current step index
+    int currentStep =
+        stepperController.currentStep() - 1; // Adjust for 0-based index
+    // Retrieve the step title for the current step
+    String? stepTitle;
+
+    // Find the appropriate step title from questionsArray
+    if (currentStep < questionsArray.length) {
+      final steps = questionsArray[currentStep]['steps'];
+      if (steps != null && steps is List && steps.isNotEmpty) {
+        stepTitle = steps[0][
+            'stepTitle']; // Assuming you're showing the title of the first step in the list
+      }
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
       appBar: AppBar(
@@ -70,19 +92,32 @@ class AddReviewScreen extends StatelessWidget {
                       child: Center(
                         child: stepperController.isLastStep()
                             ? const Icon(
-                                CustomIcons.vuesax_bulk_tick_circle,
+                                Icons.check,
                                 color: Colors.green,
                                 size: 48,
                               )
                             : Icon(
-                                stepIcons[stepperController.currentStep()] ??
-                                    Icons.help,
+                                stepIcons[stepperController.currentStep()],
                                 color: Theme.of(context).colorScheme.primary,
                                 size: 48,
                               ),
                       ),
                     ),
                   ),
+                  if (!stepperController.isLastStep() && stepTitle != null)
+                    // const SizedBox(
+                    //   height: 2,
+                    // ),
+                  Text(
+                    stepTitle!,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                    ),
+                  ),
+
                   Expanded(
                     child: ListView(
                       children: stepperController.isLastStep()
@@ -96,7 +131,7 @@ class AddReviewScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 22,
                                         fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.normal,
                                         color: Color(0xFF06B58D),
                                       ),
                                     ),
@@ -133,23 +168,18 @@ class AddReviewScreen extends StatelessWidget {
                               ),
                             ]
                           : stepQuestions[stepperController.currentStep()]
-                                  ?.map(
-                                    (question) => CustomCheckboxTile(
-                                      height: 75,
-                                      width: 300,
-                                      text:
-                                          'Disability parking space available\n(private or public parking)',
-                                      isAvailable: true,
-                                      onTap: (fsd) {
-                                        Get.find<CheckBoxController>()
-                                            .toggleDisability();
+                                  ?.asMap()
+                                  .entries
+                                  .map(
+                                    (entry) => CustomCheckboxTile(
+                                      text: entry.value,
+                                      onTap: (bool value) {
+                                        _checkBoxController
+                                            .toggleCheckBox(entry.key);
                                       },
                                       checkBoxValue: _checkBoxController
-                                          .isDisabilityChecked(),
-                                      activeBorderColor: _checkBoxController
-                                              .isDisabilityChecked()
-                                          ? Colors.pink
-                                          : Colors.grey,
+                                              .isCheckedList[entry.key].value ??
+                                          false,
                                     ),
                                   )
                                   .toList() ??
@@ -196,7 +226,7 @@ class AddReviewScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                          horizontal: 10, vertical: 10),
                     ),
                     child: const Text(
                       'Send Review',

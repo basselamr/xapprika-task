@@ -1,83 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:untitled/Controllers/CheckBoxController.dart';
 
 class CustomCheckboxTile extends StatelessWidget {
   final String text;
-  final Color activeBorderColor;
   final bool checkBoxValue;
-  final double height;
-  final double width;
-  final bool isAvailable;
   final Function(bool) onTap;
 
   const CustomCheckboxTile({
     super.key,
-    required this.isAvailable,
-    required this.onTap,
     required this.text,
-    required this.height,
-    required this.width,
     required this.checkBoxValue,
-    required this.activeBorderColor,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.all(7),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: checkBoxValue ? const Color(0xFFDA035F) : Colors.transparent,
+          width: 1,
+        ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    height: height,
-                    width: width,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: activeBorderColor,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20))),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          text,
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Checkbox.adaptive(
-                            value: checkBoxValue,
-                            activeColor: Colors.pink[100],
-                            checkColor: Colors.pink,
-                            side: const BorderSide(color: Colors.grey),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            tristate: true,
-                            onChanged: (x) {
-                              onTap(false);
-                            })
-                      ],
-                    ))
-              ],
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Color(0xFF3A3E50),
+                fontSize: 14,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
+          Checkbox(
+            value: checkBoxValue,
+            fillColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.pink[50]!;
+                }
+                return const Color(0xFFF0F2FA);
+              },
+            ),
+            checkColor: Theme.of(context).colorScheme.primary,
+            side: WidgetStateBorderSide.resolveWith(
+                  (Set<WidgetState> states) {
+                return const BorderSide(color: Colors.transparent);
+              },
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            onChanged: (bool? value) {
+              onTap(value!);
+            },
+          )
         ],
       ),
     );
