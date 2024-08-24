@@ -5,8 +5,14 @@ import 'package:untitled/Screens/AddReview.dart';
 import 'package:untitled/Screens/PlacesScreen.dart';
 import 'package:untitled/Widgets/BackArrow.dart';
 
+import '../Controllers/NewPlaceController.dart';
+
 class NewPlaceScreen extends StatelessWidget {
-  const NewPlaceScreen({super.key});
+  NewPlaceScreen({super.key});
+
+  final NewPlaceController newPlaceController = Get.put(NewPlaceController());
+  TextEditingController placeNameController = TextEditingController();
+  TextEditingController placeImageURLController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +59,10 @@ class NewPlaceScreen extends StatelessWidget {
               height: 10,
             ),
             TextField(
+              controller: placeNameController,
+              onChanged: (value) {
+                newPlaceController.setPlaceName(value);
+              },
               decoration: InputDecoration(
                 fillColor: Colors.grey[100],
                 filled: true,
@@ -77,6 +87,10 @@ class NewPlaceScreen extends StatelessWidget {
               height: 10,
             ),
             TextField(
+              controller: placeImageURLController,
+              onChanged: (value) {
+                newPlaceController.setImageUrl(value);
+              },
               decoration: InputDecoration(
                 fillColor: Colors.grey[100],
                 filled: true,

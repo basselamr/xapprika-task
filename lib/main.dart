@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'Screens/NavBar.dart';
 import 'Screens/PlacesScreen.dart';
 import 'Widgets/placeContainer.dart';
+import '../Utils/DatabaseHelper.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  await DatabaseHelper().database;
 }
 
 class MyApp extends StatelessWidget {

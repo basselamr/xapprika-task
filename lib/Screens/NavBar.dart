@@ -55,7 +55,7 @@ class NavBar extends StatelessWidget {
                       icon: const Icon(Icons.add),
                       color: Colors.blue[900],
                       onPressed: () {
-                        Get.to(() => const NewPlaceScreen());
+                        Get.to(() =>  NewPlaceScreen());
                       },
                     ),
                   ),

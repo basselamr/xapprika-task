@@ -13,7 +13,7 @@ class PlacesScreen extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 248, 250, 250),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(const NewPlaceScreen());
+          Get.to( NewPlaceScreen());
         },
         backgroundColor: Theme
             .of(context)

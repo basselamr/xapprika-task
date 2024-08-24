@@ -9,13 +9,15 @@ class StepperController extends GetxController {
   }
 
   nextStep() {
-    currentStep++;
+    if (currentStep.value < 7) {
+      currentStep.value += 1;
+    }
   }
 
   previousStep() {
-    currentStep--;
-    if (currentStep.value == 0) {
-      currentStep++;
+    if (currentStep.value > 1) {
+      currentStep.value -= 1;
     }
   }
+
 }
