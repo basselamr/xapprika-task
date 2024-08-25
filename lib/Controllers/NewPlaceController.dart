@@ -1,8 +1,12 @@
 import 'package:get/get.dart';
-import 'package:untitled/Models/Place.dart';
 import '../Utils/DatabaseHelper.dart';
+import '../Models/Place.dart';
+import '../Controllers/PlacesController.dart';
 
 class NewPlaceController extends GetxController {
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+  final PlacesController placesController = Get.find<PlacesController>();
+
   var placeName = ''.obs;
   var imageUrl = ''.obs;
   var parkingRating = 0.0.obs;
@@ -35,8 +39,7 @@ class NewPlaceController extends GetxController {
   }
 
   Future<void> addPlaceToDatabase() async {
-    final dbHelper = DatabaseHelper();
-    final place = Place(
+    Place newPlace = Place(
       placeName: placeName.value,
       imageUrl: imageUrl.value,
       parkingRating: parkingRating.value,
@@ -44,6 +47,8 @@ class NewPlaceController extends GetxController {
       servicesRating: servicesRating.value,
       toiletsRating: toiletsRating.value,
     );
-    await dbHelper.addPlace(place);
+
+    await databaseHelper.addPlace(newPlace);
+    placesController.loadPlaces();
   }
 }

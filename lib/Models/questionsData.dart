@@ -170,7 +170,7 @@ const questionsArray = [
             "responseTitle": "There are steps to the entrance, and there are ramps or elevators as alternatives.",
             "responseTitleAr": "يوجد سلالم للمدخل ويوجد منحدرات او مصاعد كبديل لها.",
             "defaultScore": 0.0,
-            "score": 20,
+            "score": 20.0,
             "isSelected": false,
           },
           {
@@ -228,8 +228,8 @@ const questionsArray = [
             "responseId": "3_1_3",
             "responseTitle": "The service is available at more than one floor in the venue.",
             "responseTitleAr": "الخدمة تقدم فى أكثر من دور بالمكان.",
-            "defaultScore": 0,
-            "score": 0,
+            "defaultScore": 0.0,
+            "score": 0.0,
             "isSelected": false,
           },
           {
@@ -237,7 +237,7 @@ const questionsArray = [
             "responseTitle": "There are no stairs to the service, or there are stairs and there are ramps or elevators as alternatives.",
             "responseTitleAr": "لا يوجد سلالم للخدمة او يوجد سلالم ويوجد منحدرات او مصاعد كبديل لها.",
             "defaultScore": 0.0,
-            "score": 15,
+            "score": 15.0,
             "isSelected": false,
           },
           {

@@ -12,7 +12,7 @@ class NavBar extends StatelessWidget {
 
   final List<Widget> _screens = [
     const Placeholder(),
-    const PlacesScreen(),
+     PlacesScreen(),
     const Placeholder(),
     const Placeholder(),
     const Placeholder(),

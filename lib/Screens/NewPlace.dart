@@ -6,6 +6,7 @@ import 'package:untitled/Screens/PlacesScreen.dart';
 import 'package:untitled/Widgets/BackArrow.dart';
 
 import '../Controllers/NewPlaceController.dart';
+import '../Controllers/PlacesController.dart';
 
 class NewPlaceScreen extends StatelessWidget {
   NewPlaceScreen({super.key});
@@ -13,6 +14,7 @@ class NewPlaceScreen extends StatelessWidget {
   final NewPlaceController newPlaceController = Get.put(NewPlaceController());
   TextEditingController placeNameController = TextEditingController();
   TextEditingController placeImageURLController = TextEditingController();
+  final PlacesController placesController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,12 @@ class NewPlaceScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => AddReviewScreen(), binding: StepperBinding());
+                  Get.to(
+                      () => AddReviewScreen(
+                            placeName: placeNameController.text,
+                            imageURL: placeImageURLController.text,
+                          ),
+                      binding: StepperBinding());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,

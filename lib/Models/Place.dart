@@ -1,22 +1,25 @@
 class Place {
-  String? placeName;
-  String? imageUrl;
-  double? parkingRating;
-  double? pavementRating;
-  double? servicesRating;
-  double? toiletsRating;
+  int? id; // Make id nullable because it will be null for new places
+  String placeName;
+  String imageUrl;
+  double parkingRating;
+  double pavementRating;
+  double servicesRating;
+  double toiletsRating;
 
   Place({
-    this.placeName,
-    this.imageUrl,
-    this.parkingRating,
-    this.pavementRating,
-    this.servicesRating,
-    this.toiletsRating,
+    this.id, // id will be auto-incremented, so it's optional
+    required this.placeName,
+    required this.imageUrl,
+    required this.parkingRating,
+    required this.pavementRating,
+    required this.servicesRating,
+    required this.toiletsRating,
   });
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'placeName': placeName,
       'imageUrl': imageUrl,
       'parkingRating': parkingRating,
@@ -28,6 +31,7 @@ class Place {
 
   static Place fromMap(Map<String, dynamic> map) {
     return Place(
+      id: map['id'],
       placeName: map['placeName'],
       imageUrl: map['imageUrl'],
       parkingRating: map['parkingRating'],

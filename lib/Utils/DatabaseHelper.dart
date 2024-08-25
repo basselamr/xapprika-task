@@ -52,6 +52,8 @@ class DatabaseHelper {
 
     return List.generate(maps.length, (i) {
       return Place(
+        id: maps[i]['id'],
+        // Assign the id from the database
         placeName: maps[i]['placeName'],
         imageUrl: maps[i]['imageUrl'],
         parkingRating: maps[i]['parkingRating'],

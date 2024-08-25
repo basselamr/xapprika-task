@@ -11,7 +11,10 @@ import 'NavBar.dart';
 import '../Models/questionsData.dart';
 
 class AddReviewScreen extends StatelessWidget {
-  AddReviewScreen({super.key});
+  final String placeName;
+  final String imageURL;
+
+  AddReviewScreen({super.key, required this.placeName, required this.imageURL});
 
   final stepperController = Get.find<StepperController>();
   final _checkBoxController = Get.put(CheckBoxController());
@@ -28,6 +31,8 @@ class AddReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    newPlaceController.setPlaceName(placeName);
+    newPlaceController.setImageUrl(imageURL);
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFF),
       appBar: AppBar(
@@ -54,7 +59,7 @@ class AddReviewScreen extends StatelessWidget {
         if (steps.isNotEmpty && steps.length >= currentStep) {
           stepTitle = steps[currentStep - 1]['stepTitle'];
           final questions = steps[currentStep - 1]['responses'] as List?;
-          _checkBoxController.initialize(questions?.length ?? 0);
+          _checkBoxController.initialize(currentStep, questions?.length ?? 0);
         }
 
         return Stack(
@@ -84,15 +89,15 @@ class AddReviewScreen extends StatelessWidget {
                     child: Center(
                       child: stepperController.isLastStep()
                           ? const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                        size: 48,
-                      )
+                              Icons.check,
+                              color: Colors.green,
+                              size: 48,
+                            )
                           : Icon(
-                        stepIcons[currentStep] ?? Icons.error,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 48,
-                      ),
+                              stepIcons[currentStep] ?? Icons.error,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 48,
+                            ),
                     ),
                   ),
                 ),
@@ -110,67 +115,73 @@ class AddReviewScreen extends StatelessWidget {
                   child: ListView(
                     children: stepperController.isLastStep()
                         ? [
-                      Center(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            const Text(
-                              'Thanks',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.normal,
-                                color: Color(0xFF06B58D),
+                            Center(
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    'Thanks',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF06B58D),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Your review submitted successfully',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Get.off(() => NavBar());
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                    ),
+                                    child: const Text(
+                                      'Go to home',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              'Your review submitted successfully',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                Get.off(() => NavBar());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                              ),
-                              child: const Text(
-                                'Go to home',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]
+                          ]
                         : (steps[currentStep - 1]['responses'] as List?)
-                        ?.asMap()
-                        .entries
-                        .map(
-                          (entry) => Obx(
-                            () => CustomCheckboxTile(
-                          text: entry.value['responseTitle'],
-                          onTap: (bool value) {
-                            print(entry.value['score']);
-                            _checkBoxController.toggleCheckBox(entry.key);
-                          },
-                          checkBoxValue: _checkBoxController
-                              .isCheckedList[entry.key].value,
-                        ),
-                      ),
-                    )
-                        .toList() ?? [],
+                                ?.asMap()
+                                .entries
+                                .map(
+                                  (entry) => Obx(() => CustomCheckboxTile(
+                                        text: entry.value['responseTitle'],
+                                        onTap: (bool value) {
+                                          _checkBoxController.toggleCheckBox(
+                                              currentStep,
+                                              entry.key,
+                                              entry.value['score'],
+                                              entry.value["responseId"]
+                                                  .substring(0, 1));
+                                        },
+                                        checkBoxValue: _checkBoxController
+                                                .getCheckBoxStates(
+                                                    currentStep)?[entry.key]
+                                                .value ??
+                                            false,
+                                      )),
+                                )
+                                .toList() ??
+                            [],
                   ),
                 ),
               ],
@@ -208,6 +219,14 @@ class AddReviewScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     stepperController.nextStep();
+                    newPlaceController.setParkingRating(
+                        _checkBoxController.parkingScore.value);
+                    newPlaceController.setPavementRating(
+                        _checkBoxController.pavementsScore.value);
+                    newPlaceController.setServicesRating(
+                        _checkBoxController.servicesScore.value);
+                    newPlaceController.setToiletsRating(
+                        _checkBoxController.toiletScore.value);
                     newPlaceController.addPlaceToDatabase();
                   },
                   style: ElevatedButton.styleFrom(
